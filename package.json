@@ -1,0 +1,31 @@
+{
+  "name": "tidalwave",
+  "version": "0.0.1",
+  "description": "Tidalwave",
+  "author": {
+    "name": "Chris Abrams",
+    "email": "mail@chrisabrams.com",
+    "url": "https://github.com/chrisabrams"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisabrams/tidalwave.git"
+  },
+  "scripts": {
+    "test": "cake test"
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    "chai": "1.8.1",
+    "coffee-script": "1.6.3",
+    "mocha": "1.16.1",
+    "sinon-chai": "2.4.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}
