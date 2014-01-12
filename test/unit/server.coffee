@@ -1,5 +1,5 @@
-Server = require '../../src/server/index'
 Client = require('websocket').client
+Server = require '../../src/server/index'
 
 describe 'Server - Unit', ->
 

@@ -22,7 +22,8 @@
     "chai": "1.8.1",
     "coffee-script": "1.6.3",
     "mocha": "1.16.1",
-    "sinon-chai": "2.4.0"
+    "sinon-chai": "2.4.0",
+    "tidalwave-router": "*"
   },
   "licenses": [
     {

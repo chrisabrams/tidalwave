@@ -1,33 +1,43 @@
 Client = require('websocket').client
-Router = require '../../src/router/index'
+Router = require 'tidalwave-router'
 Server = require '../../src/server/index'
 
 describe 'Server - Functional', ->
 
-  it 'should be able to listen for a matched route', (done) ->
-
-    client = new Client
+  it 'should be able to set a route', (done) ->
 
     server = new Server
       port: 8000
 
-    server.on 'request', (request) ->
-      
-      connection = request.accept 'echo-protocol', request.origin
+    router = new Router
+    server.use router
 
-      routes = require '../misc/routes'
-      router = new Router routes, connection
-      server.use router
+    router.on 'yo', (req, msg, conn) ->
 
-      server.on 'dispatcher:dispatch', (route) ->
+    expect(router.routes).to.have.length 1
 
-        expect(route).to.be.an 'object'
-        expect(route.controller).to.be.a 'string'
-        expect(route.action).to.be.a 'string'
+    server.shutdown ->
 
-        server.shutdown ->
+      done()
 
-          done()
+  it 'should fire route callback on match', (done) ->
+
+    client = new Client
+    server = new Server
+      port: 8000
+
+    router = new Router
+    server.use router
+
+    router.on 'yo', (req, msg, conn) ->
+
+      expect(req).to.be.an 'object'
+      expect(msg).to.be.an 'object'
+      expect(conn).to.be.an 'object'
+
+      server.shutdown ->
+
+        done()
 
     client.on 'connect', (connection) ->
   

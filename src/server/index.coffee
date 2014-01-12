@@ -82,6 +82,9 @@ module.exports = class TidalWaveServer
 
     obj.emitter = @emitter
 
+    if typeof obj.onUse is 'function'
+      obj.onUse @
+
     @using.push obj
 
   using: []
