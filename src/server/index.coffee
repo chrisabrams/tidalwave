@@ -11,13 +11,19 @@ module.exports = class TidalWaveServer
     port = options.port or 8080
 
     httpServer = http.createServer((request, response) ->
-      #console.log (new Date()) + " Received request for " + request.url
+
+      util.debug (new Date()) + " Received request for " + request.url
       response.writeHead 404
       response.end()
     )
 
+    sockets = []
+    httpServer.on 'connection', (socket) ->
+      sockets.push socket
+
     httpServer.listen port, ->
-      console.log (new Date()) + " Server is listening on port: #{port}"
+
+      util.debug (new Date()) + " Server is listening on port: #{port}"
 
     wsServer = new WebSocketServer(
       httpServer: httpServer
@@ -28,12 +34,18 @@ module.exports = class TidalWaveServer
       wsServer.on args...
 
     @shutdown = (cb) ->
+
+      @removeAllUsed()
+
       wsServer.shutDown()
 
-      to = setTimeout(->
+      _.each sockets, (socket, index) ->
+        socket.destroy()
+
+      httpServer.close ->
         cb()
-        clearTimeout to
-      , 1000)
+
+    return @
 
     #events.EventEmitter.call @
     #util.inherits @, events.EventEmitter
@@ -41,3 +53,15 @@ module.exports = class TidalWaveServer
   originIsAllowed: (origin) ->
 
     true
+
+  removeAllUsed: ->
+
+    _.each @using, (obj, index) =>
+      delete @using[index]
+
+    @using = []
+
+  use: (obj) ->
+    @using.push obj
+
+  using: []

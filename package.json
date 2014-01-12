@@ -15,7 +15,8 @@
     "test": "cake test"
   },
   "dependencies": {
-
+    "underscore": "1.5.2",
+    "websocket": "1.0.8"
   },
   "devDependencies": {
     "chai": "1.8.1",

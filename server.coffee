@@ -1,3 +1,3 @@
-Server = require './src/server/index'
+Route = require './src/router/route'
 
-server = new Server
+console.log route = new Route 'yo/:id/ma', 'foo', 'bar'
