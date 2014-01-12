@@ -76,7 +76,7 @@ module.exports = class TidalWaveServer
 
           delete @using[index]
 
-    @using = []
+    TidalWaveServer::using = []
 
   use: (obj) ->
 

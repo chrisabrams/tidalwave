@@ -134,8 +134,7 @@ describe 'Server - Unit', ->
 
     server.use obj
 
-    #expect(server.using).to.have.length 1
-    expect(server.using).to.have.length 2
+    expect(server.using).to.have.length 1
 
     server.shutdown ->
 
