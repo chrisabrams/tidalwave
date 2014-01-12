@@ -16,7 +16,7 @@ describe 'Server - Functional', ->
       connection = request.accept 'echo-protocol', request.origin
 
       routes = require '../misc/routes'
-      router = new Router routes, connection, 1
+      router = new Router routes, connection
       server.use router
 
       server.on 'dispatcher:dispatch', (route) ->

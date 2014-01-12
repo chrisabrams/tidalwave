@@ -5,7 +5,7 @@ describe 'Router - Unit', ->
 
   it 'should be able to initialize', (done) ->
 
-    router = new Router routes, {}, 2
+    router = new Router routes, {}
 
     expect(router).to.be.an 'object'
     expect(router.findMatch).to.be.a 'function'
