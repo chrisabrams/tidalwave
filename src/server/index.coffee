@@ -60,6 +60,8 @@ module.exports = class TidalWaveServer
       httpServer.close ->
         cb()
 
+    @using = new Array
+
     return @
 
   originIsAllowed: (origin) ->
@@ -76,7 +78,7 @@ module.exports = class TidalWaveServer
 
           delete @using[index]
 
-    TidalWaveServer::using = []
+      @using = []
 
   use: (obj) ->
 
@@ -86,5 +88,3 @@ module.exports = class TidalWaveServer
       obj.onUse @
 
     @using.push obj
-
-  using: []
