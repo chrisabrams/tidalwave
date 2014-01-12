@@ -3,7 +3,7 @@ escapeRegExp   = /[\-{}\[\]+?.,\\\^$|#\s]/g
 optionalRegExp = /\((.*?)\)/g
 paramRegExp    = /(?::|\*)(\w+)/g
 
-class Route
+module.exports = class Route
 
   constructor: (pattern, controller, action, options) ->
 
@@ -70,6 +70,8 @@ class Route
     matched = @regExp.test path
     return false unless matched
 
+    true
+
   testConstraints: (params) ->
 
     constraints = @options.constraints
@@ -85,7 +87,3 @@ class Route
       return false if params[paramName] is undefined
 
     @testConstraints params
-
-module.exports = (args...) ->
-
-  return new Route args...

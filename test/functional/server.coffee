@@ -2,9 +2,9 @@ Client = require('websocket').client
 Router = require '../../src/router/index'
 Server = require '../../src/server/index'
 
-describe 'Server - Unit', ->
+describe 'Server - Functional', ->
 
-  it.skip 'should be able to route a message', (done) ->
+  it 'should be able to listen for a matched route', (done) ->
 
     client = new Client
 
@@ -15,8 +15,8 @@ describe 'Server - Unit', ->
       
       connection = request.accept 'echo-protocol', request.origin
 
-      Routes = require '../misc/routes'
-      router = new Router Routes, connection
+      routes = require '../misc/routes'
+      router = new Router routes, connection, 1
       server.use router
 
       server.on 'dispatcher:dispatch', (route) ->
@@ -28,5 +28,9 @@ describe 'Server - Unit', ->
         server.shutdown ->
 
           done()
+
+    client.on 'connect', (connection) ->
+  
+      connection.sendUTF JSON.stringify({route: 'yo'})
 
     client.connect 'ws://localhost:8000/', 'echo-protocol'

@@ -1,5 +1,5 @@
 _               = require 'underscore'
-events          = require 'events'
+EventEmitter    = require('events').EventEmitter
 http            = require 'http'
 WebSocketServer = require('websocket').server
 util            = require 'util'
@@ -30,8 +30,23 @@ module.exports = class TidalWaveServer
       autoAcceptConnections: false
     )
 
-    @on = (args...) ->
-      wsServer.on args...
+    @emitter = new EventEmitter
+
+    @on = (str, cb) =>
+
+      @internalEvents = [
+        'dispatcher:dispatch'
+      ]
+
+      # If an internal event is called
+      if _.contains(@internalEvents, str)
+
+        @emitter.on str, cb
+
+      # It's a websocket event
+      else
+
+        wsServer.on str, cb
 
     @shutdown = (cb) ->
 
@@ -47,9 +62,6 @@ module.exports = class TidalWaveServer
 
     return @
 
-    #events.EventEmitter.call @
-    #util.inherits @, events.EventEmitter
-
   originIsAllowed: (origin) ->
 
     true
@@ -57,11 +69,19 @@ module.exports = class TidalWaveServer
   removeAllUsed: ->
 
     _.each @using, (obj, index) =>
-      delete @using[index]
+
+      if typeof obj.destroy is 'function'
+
+        obj.destroy =>
+
+          delete @using[index]
 
     @using = []
 
   use: (obj) ->
+
+    obj.emitter = @emitter
+
     @using.push obj
 
   using: []

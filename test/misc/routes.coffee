@@ -1,3 +1,3 @@
 module.exports = (match) ->
 
-  match 'yo', {}
+  match 'yo', 'foo#bar', {}
