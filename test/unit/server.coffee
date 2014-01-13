@@ -3,7 +3,7 @@ Server = require '../../src/server/index'
 
 describe 'Server - Unit', ->
 
-  it 'should be able to initialize and shut down', (done) ->
+  it 'should initialize and shut down', (done) ->
 
     server = new Server
       port: 8000
@@ -14,7 +14,7 @@ describe 'Server - Unit', ->
 
       done()
 
-  it 'should be able to listen for a request', (done) ->
+  it 'should listen for a request', (done) ->
 
     client = new Client
 
@@ -31,7 +31,7 @@ describe 'Server - Unit', ->
 
     client.connect 'ws://localhost:8000/', 'echo-protocol'
 
-  it 'should be able to accept a connection', (done) ->
+  it 'should accept a connection', (done) ->
 
     client = new Client
 
@@ -50,7 +50,7 @@ describe 'Server - Unit', ->
 
     client.connect 'ws://localhost:8000/', 'echo-protocol'
 
-  it 'should be able to receive a message', (done) ->
+  it 'should receive a message', (done) ->
 
     client = new Client
 
@@ -77,7 +77,7 @@ describe 'Server - Unit', ->
 
     client.connect 'ws://localhost:8000/', 'echo-protocol'
 
-  it 'should be able to send a message', (done) ->
+  it 'should send a message', (done) ->
 
     client = new Client
 
@@ -104,7 +104,7 @@ describe 'Server - Unit', ->
 
     client.connect 'ws://localhost:8000/', 'echo-protocol'
 
-  it 'should be able to listen for a client close a connection', (done) ->
+  it 'should listen for a client close a connection', (done) ->
 
     client = new Client
 
@@ -125,7 +125,7 @@ describe 'Server - Unit', ->
 
     client.connect 'ws://localhost:8000/', 'echo-protocol'
 
-  it 'should be able to use an object', (done) ->
+  it 'should use an object', (done) ->
 
     server = new Server
       port: 8000
@@ -140,7 +140,7 @@ describe 'Server - Unit', ->
 
       done()
 
-  it 'should be able to remove all used objects', (done) ->
+  it 'should remove all used objects', (done) ->
 
     server = new Server
       port: 8000

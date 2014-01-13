@@ -34,9 +34,7 @@ module.exports = class TidalWaveServer
 
     @on = (str, cb) =>
 
-      @internalEvents = [
-        'dispatcher:dispatch'
-      ]
+      @internalEvents = []
 
       # If an internal event is called
       if _.contains(@internalEvents, str)

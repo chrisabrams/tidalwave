@@ -1,46 +1,96 @@
-Client = require('websocket').client
+Client = require 'tidalwave-client'
 Router = require 'tidalwave-router'
 Server = require '../../src/server/index'
 
 describe 'Server - Functional', ->
 
-  it 'should be able to set a route', (done) ->
-
-    server = new Server
-      port: 8000
-
-    router = new Router
-    server.use router
-
-    router.on 'yo', (req, msg, conn) ->
-
-    expect(router.routes).to.have.length 1
-
-    server.shutdown ->
-
-      done()
-
   it 'should fire route callback on match', (done) ->
 
     client = new Client
+      port: 8000
+
     server = new Server
       port: 8000
 
-    router = new Router
-    server.use router
+    server.on 'request', (request) ->
+      connection = request.accept 'echo-protocol', request.origin
 
-    router.on 'yo', (req, msg, conn) ->
+      router = new Router connection, request
+      server.use router
 
-      expect(req).to.be.an 'object'
-      expect(msg).to.be.an 'object'
-      expect(conn).to.be.an 'object'
+      router.on 'yo', (pkg, conn, req) ->
 
-      server.shutdown ->
+        expect(pkg).to.be.an 'object'
+        expect(conn).to.be.an 'object'
+        expect(req).to.be.an 'object'
 
-        done()
+        server.shutdown ->
+
+          done()
+
+    client.on 'connect', (connection) ->
+
+      router = new Router connection
+  
+      router.dispatch 'yo', {}
+
+    client.connect()
+
+  it 'should receive a data package', (done) ->
+
+    client = new Client
+      port: 8000
+
+    server = new Server
+      port: 8000
+
+    server.on 'request', (request) ->
+      connection = request.accept 'echo-protocol', request.origin
+
+      router = new Router connection, request
+      server.use router
+
+      router.on 'yo', (pkg, conn, req) ->
+
+        expect(pkg).to.be.an 'object'
+        expect(pkg.name).to.equal 'Chris'
+
+        server.shutdown ->
+
+          done()
 
     client.on 'connect', (connection) ->
   
-      connection.sendUTF JSON.stringify({route: 'yo'})
+      router = new Router connection
+  
+      router.dispatch 'yo', {name: 'Chris'}
 
-    client.connect 'ws://localhost:8000/', 'echo-protocol'
+    client.connect()
+
+  it 'should dispatch', (done) ->
+
+    client = new Client
+      port: 8000
+
+    server = new Server
+      port: 8000
+
+    server.on 'request', (request) ->
+      connection = request.accept 'echo-protocol', request.origin
+
+      router = new Router connection, request
+      server.use router
+
+      client.on 'connect', (connection) ->
+
+        router.connection.sendUTF = sinon.spy()
+
+        router.dispatch 'whatup', {}
+
+        expect(router.connection.sendUTF).to.be.called
+
+        server.shutdown ->
+
+          done()
+
+    client.connect()
